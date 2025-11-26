@@ -7,12 +7,12 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Pirata+One&family=UnifrakturMaguntia&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Grenze+Gotisch:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
 
     <style>
         /* --- DEFINICE PROMĚNNÝCH (BAREV) --- */
         :root {
-            /* Výchozí (Dark Mode) */
+            /* === DARK MODE (Výchozí) === */
             --bg-color: #050505;
             --bg-secondary: #0a0a0a;
             --text-main: #dcdcdc;
@@ -20,9 +20,13 @@
             --accent: #8a0303;
             --border-color: #333333;
             --btn-hover: #b30000;
+            
+            /* Pozadí pro Dark Mode + Gradient */
+            --bg-intro-img: url('HERO-BG.png');
+            --hero-gradient: linear-gradient(to right, rgba(0,0,0, 0.9), rgba(0,0,0, 0.4));
         }
 
-        /* Light Mode */
+        /* === LIGHT MODE === */
         body.light-mode {
             --bg-color: #f4f1ea;
             --bg-secondary: #ebe7dd;
@@ -31,6 +35,10 @@
             --accent: #6636a8; 
             --border-color: #c0b9a8;
             --btn-hover: #6c38ab;
+            
+            /* Pozadí pro Light Mode + ŽÁDNÝ Gradient (transparentní) */
+            --bg-intro-img: url('HERO-LIGHT-BG.png');
+            --hero-gradient: linear-gradient(rgba(255,255,255, 0), rgba(255,255,255, 0)); 
         }
 
         /* --- ZÁKLADNÍ STYLY --- */
@@ -48,15 +56,34 @@
         }
 
         h1, h2, h3 {
-            font-family: 'UnifrakturMaguntia', cursive;
+            /* NOVÝ FONT, KTERÝ UMÍ ČESKY: */
+            font-family: 'Cinzel Decorative', cursive;
             font-weight: 400;
+            letter-spacing: 1px; /* U tohoto fontu vypadá malý rozestup dobře */
+            font-size: 110%;     /* Tento font je opticky trochu menší, tak ho zvětšíme */
+        }
+
+        /* Pokud používáte i .text-highlight (to vryté), změňte to taky: */
+        .text-highlight {
+            font-family: 'Cinzel Decorative', cursive;
+            /* (Pirata One taky neumí ě/š, takže raději použijte tento všude) */
+        }
+
+        /* Pro tlačítka a navigační menu */
+        .nav-links a, .cta-button, .subtitle {
+            font-family: 'Cinzel Decorative', cursive;
+            font-weight: 700;
+        }
+
+        /* Pro běžný text (odstavce) */
+        body, p {
+            font-family: 'Lato', sans-serif;
         }
 
         /* Třída pro vložení Pirata One fontu dovnitř textu */
         .text-highlight {
             font-family: 'Pirata One', cursive;
             font-weight: 400;
-            /* color: var(--accent);  <- Pokud bys to chtěla i barevné, odkomentuj */
         }
 
         .subtitle {
@@ -71,7 +98,7 @@
         /* --- NAVIGACE --- */
         nav {
             display: flex;
-            justify-content: space-between; /* Toto je základ, ale margin-left to přebije */
+            justify-content: space-between;
             align-items: center;
             padding: 20px 50px;
             border-bottom: 1px solid var(--border-color);
@@ -83,20 +110,18 @@
             transition: background-color 0.5s ease, border-color 0.5s ease;
         }
 
-        .logo {
-            font-size: 1.8rem;
+        .nav-logo-text {
+            font-size: 1.5rem;
             color: var(--text-main);
             text-decoration: none;
             letter-spacing: 1px;
+            font-family: 'UnifrakturMaguntia', cursive;
         }
-        .logo span { color: var(--accent); }
 
         .nav-links {
             list-style: none;
             display: flex;
             gap: 30px;
-            
-            /* POSUN DOPRAVA */
             margin-left: auto;  
             margin-right: 30px; 
         }
@@ -144,25 +169,76 @@
             font-family: 'Cinzel Decorative', cursive;
         }
 
-        /* --- SEKCE 1: ÚVOD (HERO) --- */
+        /* --- SEKCE 1: ÚVOD (HERO) - UPRAVENO --- */
         #intro {
             height: 100vh;
-            text-align: center;
             position: relative;
-            background: radial-gradient(circle at center, transparent 0%, var(--bg-color) 90%);
+            
+            /* DYNAMICKÉ POZADÍ */
+            /* Zde se aplikuje gradient (jen v dark mode) a obrázek */
+            background: var(--hero-gradient), var(--bg-intro-img);
+            
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background-image 0.5s ease;
+
+            /* FLEXBOX PRO ROZLOŽENÍ (Logo vlevo, Text vpravo) */
+            display: flex;
+            flex-direction: row; /* Vedle sebe */
+            justify-content: space-between; /* Roztáhnout do stran */
+            align-items: center;
+            padding: 0 10%; /* Odsazení z boků */
         }
 
-        #intro::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1598371839696-5c5bb62d8326?q=80&w=2574&auto=format&fit=crop');
-            background-size: cover; background-position: center;
-            opacity: 0.15; z-index: -1; filter: grayscale(100%);
-             transition: opacity 0.5s ease;
+        /* Kontejner pro logo vlevo */
+        .intro-logo-container {
+            flex: 1; /* Zabere místo vlevo */
+            display: flex;
+            justify-content: center; /* Vycentrování loga v jeho sloupci */
         }
-        body.light-mode #intro::before { opacity: 0.08; }
 
-        #intro h1 { font-size: 5rem; margin-bottom: 10px; line-height: 1.1; }
-        #intro p { font-size: 1.2rem; max-width: 600px; margin: 20px auto 40px; color: var(--text-muted); }
+        .intro-logo-img {
+            max-width: 550px; /* Maximální šířka loga */
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); /* Stín pod logem */
+        }
+
+        /* Kontejner pro text vpravo */
+        .intro-content {
+            flex: 1; /* Zabere místo vpravo */
+            text-align: right; /* Zarovnání textu doprava */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* Tlačítko taky doprava */
+            z-index: 2;
+        }
+
+        /* 1. Hlavní nadpis */
+        #intro h1 { 
+            font-size: 4.5rem; 
+            margin-bottom: 5px; 
+            line-height: 1; 
+            text-transform: uppercase;
+        }
+        
+        /* 2. Jméno (Podnadpis) */
+        #intro h2 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            font-family: 'Cinzel Decorative', cursive;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        /* 3. About me text */
+        #intro p { 
+            font-size: 1.1rem; 
+            max-width: 500px; /* Aby text nebyl moc široký */
+            margin-bottom: 40px; 
+            color: var(--text-main);
+            opacity: 0.9;
+        }
 
         .cta-button {
             display: inline-block; padding: 15px 40px; background-color: transparent;
@@ -194,8 +270,6 @@
             overflow: hidden;
             border: 1px solid var(--border-color);
             cursor: pointer;
-            
-            /* Animace */
             opacity: 0;
             transform: translateY(100px) scale(0.95);
             transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
@@ -228,19 +302,32 @@
             transition: background-color 0.5s ease, border-color 0.5s ease;
         }
 
-        @media (max-width: 768px) {
+        /* --- RESPONSIVITA (Mobil) --- */
+        @media (max-width: 900px) {
+            #intro {
+                flex-direction: column-reverse; /* Na mobilu text nahoře, logo dole nebo naopak */
+                justify-content: center;
+                text-align: center;
+                padding-top: 100px;
+            }
+            .intro-content {
+                align-items: center; /* Na mobilu vycentrovat */
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .intro-logo-img { max-width: 200px; margin-bottom: 20px; }
             #intro h1 { font-size: 3rem; }
-            nav { padding: 15px 20px; }
+            #intro h2 { font-size: 1.8rem; }
+            
             .nav-links { display: none; }
-            .section-title { font-size: 2.2rem; }
-            .gallery-item { height: 350px; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="#" class="logo">INKEDTERRA <span>TATTOO</span></a>
+        <a href="#" class="nav-logo-text">INKEDTERRA</a>
+        
         <ul class="nav-links">
             <li><a href="#gallery">Galerie</a></li>
             <li><a href="#artists">Umělci</a></li>
@@ -254,10 +341,23 @@
     <main>
         
         <section id="intro">
-            <span class="subtitle">Est. 2025 • Karlovy Vary</span>
-            <h1>Umění <span class="text-highlight">vry</span>té<br>do duše</h1>
-            <p>Specializuji se na blackwork, gothic lettering a realismus. <br>Váš příběh, můj inkoust.</p>
-            <a href="#gallery" class="cta-button">Prohlédnout práce</a>
+            
+            <div class="intro-logo-container">
+                <img src="logo-dark.png" alt="InkedTerra Logo" class="intro-logo-img" id="hero-logo">
+            </div>
+
+            <div class="intro-content">
+                <span class="subtitle">Est. 2025 • Karlovy Vary</span>
+                
+                <h1>Umění vryté<br>do duše</h>
+                
+                <h2>TEREZA NAWROCKÁ</h2>
+                
+                <p>Specializuji se na blackwork, gothic lettering a realismus. <br>Váš příběh, můj inkoust.</p>
+                
+                <a href="#gallery" class="cta-button">Prohlédnout práce</a>
+            </div>
+
         </section>
 
         <section id="gallery">
@@ -291,23 +391,42 @@
     </footer>
 
     <script>
-        // --- 1. LOGIKA PRO DARK/LIGHT MODE ---
+        // --- 1. LOGIKA PRO DARK/LIGHT MODE + LOGO SWAP ---
         const toggleBtn = document.getElementById('theme-toggle-btn');
         const body = document.body;
+        const logoImg = document.getElementById('hero-logo'); // Odkaz na logo v Hero sekci
         const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)');
 
         function setMode(isLight) {
-            if (isLight) { body.classList.add('light-mode'); } else { body.classList.remove('light-mode'); }
+            if (isLight) { 
+                body.classList.add('light-mode');
+                // Změna loga pro světlý režim
+                logoImg.src = 'logo-light.png'; 
+            } else { 
+                body.classList.remove('light-mode');
+                // Změna loga pro tmavý režim
+                logoImg.src = 'logo-dark.png';
+            }
         }
 
+        // Načtení uloženého tématu
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light') { setMode(true); } 
         else if (savedTheme === 'dark') { setMode(false); } 
         else { setMode(systemPrefersLight.matches); }
 
+        // Kliknutí na tlačítko
         toggleBtn.addEventListener('click', () => {
-            body.classList.toggle('light-mode');
-            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+            const isLightNow = body.classList.toggle('light-mode');
+            
+            // Okamžitá změna loga při kliknutí
+            if (isLightNow) {
+                logoImg.src = 'logo-light.png';
+                localStorage.setItem('theme', 'light');
+            } else {
+                logoImg.src = 'logo-dark.png';
+                localStorage.setItem('theme', 'dark');
+            }
         });
         
         systemPrefersLight.addEventListener('change', (e) => {
